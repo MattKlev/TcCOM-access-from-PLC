@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{c11e6cf5-99d6-4cfa-8971-b26aba6918be}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	StateMachine : FB_StateMachine;
+	hr			 : HRESULT;
+
+	//I_StateMachine 	
+	Start : BOOL;
+	Stop  : BOOL;
+	State : INT;
+
+	//ITComObject
+	SetTcCOMState	   : BOOL;
+	NewState		   : TCOM_STATE := TCOM_STATE.TCOM_STATE_PREOP;
+	GetTcComState	   : BOOL;
+	ActState		   : TCOM_STATE;
+	GetParam, SetParam : BOOL;
+	SizeOfState		   : UDINT;
+	PointerToState	   : POINTER TO INT;
+	Param_State		   : INT;
+
+	//ITCADI	
+	PointerToInputs	 : POINTER TO INT;
+	PointerToOutputs : POINTER TO INT;
+	GetIn1, SetIn1	 : BOOL;
+	In1				 : INT;
+	GetOut1, SetOut1 : BOOL;
+	Out1			 : INT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//I_StateMachine 
+IF StateMachine.ip_StateMachine <> 0 THEN
+	IF Start THEN
+		StateMachine.ip_StateMachine.M_Start();
+		Start := FALSE;
+	END_IF
+
+	IF Stop THEN
+		StateMachine.ip_StateMachine.M_Stop();
+		Stop := FALSE;
+	END_IF
+
+	StateMachine.ip_StateMachine.M_GetState(State);
+END_IF
+
+//ITComObject
+IF StateMachine.ip_ComObject <> 0 THEN
+	IF SetTcCOMState THEN
+		SetTcCOMState := FALSE;
+		hr			  := StateMachine.ip_ComObject.TcSetObjState(state := NewState, ipSrv := TwinCAT_SystemInfoVarList._AppInfo.TComSrvPtr, pInitData := 0);
+	END_IF
+
+	IF GetTcComState THEN
+		GetTcComState := FALSE;
+		hr			  := StateMachine.ip_ComObject.TcGetObjState(ADR(ActState));
+	END_IF
+
+	IF GetParam OR SetParam THEN
+		SizeOfState	   := SIZEOF(Param_State);
+		PointerToState := ADR(Param_State);
+	END_IF
+
+	IF GetParam THEN
+		GetParam := FALSE;
+		hr		 := StateMachine.ip_ComObject.TcGetObjPara(pid	 := 16#1,
+														   nData := SizeOfState,
+														   pData := PointerToState,
+														   0);
+	END_IF
+
+	IF SetParam THEN
+		SetParam := FALSE;
+		hr		 := StateMachine.ip_ComObject.TcSetObjPara(pid	 := 16#1,
+														   nData := SizeOfState,
+														   pData := PointerToState,
+														   0);
+	END_IF
+END_IF
+
+//ITCADI
+IF StateMachine.ip_DataArea <> 0 THEN
+	IF GetIn1 THEN
+		GetIn1 := FALSE;
+		hr	   := StateMachine.ip_DataArea.GetImagePtr(size	  := SIZEOF(In1),
+													   offs	  := 0,
+													   adi_x  := 1,
+													   ppData := ADR(PointerToInputs));
+
+		IF hr = S_OK THEN
+			MEMCPY(destAddr := ADR(In1), srcAddr := PointerToInputs, n := SIZEOF(In1));
+			hr := StateMachine.ip_DataArea.ReleaseImagePtr(PointerToInputs);
+		END_IF
+	END_IF
+
+	IF SetIn1 THEN
+		SetIn1 := FALSE;
+		hr	   := StateMachine.ip_DataArea.GetImagePtr(size	  := SIZEOF(In1),
+													   offs	  := 0,
+													   adi_x  := 1,
+													   ppData := ADR(PointerToInputs));
+
+		IF hr = S_OK THEN
+			MEMCPY(destAddr := PointerToInputs, srcAddr := ADR(In1), n := SIZEOF(In1));
+			hr := StateMachine.ip_DataArea.ReleaseImagePtr(PointerToInputs);
+		END_IF
+	END_IF
+
+	IF GetOut1 THEN
+		GetOut1 := FALSE;
+		hr		:= StateMachine.ip_DataArea.GetImagePtr(size   := SIZEOF(Out1),
+														offs   := 0,
+														adi_x  := 2,
+														ppData := ADR(PointerToOutputs));
+
+		IF hr = S_OK THEN
+			MEMCPY(destAddr := ADR(Out1), srcAddr := PointerToOutputs, n := SIZEOF(Out1));
+			hr := StateMachine.ip_DataArea.ReleaseImagePtr(PointerToOutputs);
+		END_IF
+	END_IF
+
+	IF SetOut1 THEN
+		SetOut1 := FALSE;
+		hr		:= StateMachine.ip_DataArea.GetImagePtr(size   := SIZEOF(Out1),
+														offs   := 0,
+														adi_x  := 2,
+														ppData := ADR(PointerToOutputs));
+
+		IF hr = S_OK THEN
+			MEMCPY(destAddr := PointerToOutputs, srcAddr := ADR(Out1), n := SIZEOF(Out1));
+			hr := StateMachine.ip_DataArea.ReleaseImagePtr(PointerToOutputs);
+		END_IF
+	END_IF
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

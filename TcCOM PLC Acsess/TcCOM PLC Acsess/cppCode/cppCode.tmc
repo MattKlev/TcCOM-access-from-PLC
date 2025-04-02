@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcModuleClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2009/05/TcModuleClass">
+  <Vendor>
+    <Name>C++ Module Vendor</Name>
+  </Vendor>
+  <DataTypes ><DataType><Name GUID="{658d4b07-ccbe-463e-b186-5bad3bad5b1d}">I_StateMachine</Name><BaseType GUID="{00000001-0000-0000-e000-000000000064}">ITcUnknown</BaseType><Method><Name>M_Start</Name><ReturnType GUID="{18071995-0000-0000-0000-000000000019}">HRESULT</ReturnType></Method><Method><Name>M_Stop</Name><ReturnType GUID="{18071995-0000-0000-0000-000000000019}">HRESULT</ReturnType></Method><Method><Name>M_GetState</Name><ReturnType GUID="{18071995-0000-0000-0000-000000000019}">HRESULT</ReturnType><Parameter><Name>State</Name><Type GUID="{18071995-0000-0000-0000-000000000006}" ReferenceTo="true">INT</Type></Parameter></Method><Hides><Hide GUID="{37b5fd93-3d24-4308-915f-23f3862a66cf}" /><Hide GUID="{5ce72dee-1034-433d-8c4f-a94cfe8bffc3}" /></Hides></DataType></DataTypes>
+  <Groups>
+    <Group SortOrder="701">
+      <Name>C++</Name>
+      <DisplayName>C++ Modules</DisplayName>
+    </Group>
+  </Groups>
+  <Modules>
+    <Module GUID="{0116fe3c-346f-44ef-9069-89d2fb469040}" Group="C++">
+      <Name>RtContextModule</Name>
+      <CLSID ClassFactory="cppCode" RealTimeInstantiable="true">{0116fe3c-346f-44ef-9069-89d2fb469040}</CLSID>
+      <Licenses>
+        <License>
+          <LicenseId>{304D006A-8299-4560-AB79-438534B50288}</LicenseId>
+          <Comment>TC3 C++</Comment>
+        </License>
+      </Licenses>
+      <InitSequence>PSO</InitSequence>
+      <Contexts>
+        <Context>
+          <Id>1</Id>
+        </Context>
+      </Contexts>
+      <Interfaces>
+        <Interface DisableCodeGeneration="true">
+          <Type GUID="{00000012-0000-0000-E000-000000000064}">ITComObject</Type>
+        </Interface>
+        <Interface DisableCodeGeneration="true">
+          <Type GUID="{03000012-0000-0000-E000-000000000064}">ITcADI</Type>
+        </Interface>
+        <Interface DisableCodeGeneration="true">
+          <Type GUID="{03000018-0000-0000-E000-000000000064}">ITcWatchSource</Type>
+        </Interface><Interface><Type GUID="{658d4b07-ccbe-463e-b186-5bad3bad5b1d}">I_StateMachine</Type></Interface>
+      </Interfaces>
+      <Parameters>
+        <Parameter HideParameter="true">
+          <Name>TraceLevelMax</Name>
+          <Comment>Controls the amount of log messages.</Comment>
+          <BaseType GUID="{8007ae3b-86bb-40f2-b385-ef87fcc239a4}">TcTraceLevel</BaseType>
+          <PTCID>#x03002103</PTCID>
+          <ContextId>1</ContextId>
+        </Parameter>
+        <Parameter CreateSymbol="true">
+          <Name>State</Name>
+          <BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+          <PTCID>#x00000001</PTCID>
+          <ContextId>1</ContextId>
+        </Parameter>
+      </Parameters>
+      <DataAreas>
+        <DataArea>
+          <AreaNo AreaType="InputSrc" CreateSymbols="true">1</AreaNo>
+          <Name>Inputs</Name>
+          <ContextId>1</ContextId>
+          <Symbol>
+            <Name>In1</Name>
+            <BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+          </Symbol>
+        </DataArea>
+        <DataArea>
+          <AreaNo AreaType="OutputDst" CreateSymbols="true">2</AreaNo>
+          <Name>Outputs</Name>
+          <ContextId>1</ContextId>
+          <Symbol>
+            <Name>out1</Name>
+            <BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+          </Symbol>
+        </DataArea>
+      </DataAreas>
+      <InterfacePointers />
+      <DataPointers />
+      <Deployment />
+    </Module>
+  </Modules>
+  <Library>
+    <Name>cppCode</Name>
+    <Version>0.0.0.1</Version>
+  </Library>
+</TcModuleClass>

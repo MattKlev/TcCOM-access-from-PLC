@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_StateMachine" Id="{f4b607c6-f2ee-4293-ae2b-9393c155609d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StateMachine
+VAR_INPUT
+	ip_StateMachine : I_StateMachine;
+	ip_ComObject	: ITComObject;
+	ip_DataArea		: ITCADI;
+END_VAR
+
+VAR
+	{attribute 'TcInitSymbol'}
+	oid				 : OTCID;
+	hrStateMachine	 : HRESULT;
+	iid_StateMachine : IID := TC_GLOBAL_IID_LIST.IID_I_StateMachine;
+	hrGetInstance	 : HRESULT;
+	iid_TcCOMObject	 : IID := TC_GLOBAL_IID_LIST.IID_ITComObject;
+	hrITcADI		 : HRESULT;
+	iid_ITcADI		 : IID := TC_GLOBAL_IID_LIST.IID_ITcADI;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="FB_Exit" Id="{3cb69e99-162c-4f17-a08b-14863e2a48f0}">
+      <Declaration><![CDATA[//FB_Exit must be implemented explicitly. If there is an implementation, then the
+
+//method is called before the controller removes the code of the function block instance
+
+//(implicit call). The return value is not evaluated.
+METHOD FB_Exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // TRUE: the exit method is called in order to leave the instance which will be copied afterwards (online change).  
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bInCopyCode THEN
+	FW_SafeRelease(ADR(ip_StateMachine));
+	FW_SafeRelease(ADR(ip_ComObject));
+	FW_SafeRelease(ADR(ip_DataArea));
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_Init" Id="{745b83e1-611d-4762-9f2e-f12020888715}">
+      <Declaration><![CDATA[//FB_Init is always available implicitly and it is used primarily for initialization.
+
+//The return value is not evaluated. For a specific influence, you can also declare the
+
+//methods explicitly and provide additional code there with the standard initialization
+
+//code. You can evaluate the return value.
+METHOD FB_Init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // TRUE: the retain variables are initialized (reset warm / reset cold)
+	bInCopyCode	 : BOOL; // TRUE: the instance will be copied to the copy code afterward (online change)  
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bInCopyCode THEN
+	hrStateMachine := FW_ObjMgr_GetObjectInstance(oid := oid, iid := iid_StateMachine, ADR(ip_StateMachine));
+	hrStateMachine := FW_ObjMgr_GetObjectInstance(oid := oid, iid := iid_TcCOMObject, ADR(ip_ComObject));
+	hrITcADI	   := FW_ObjMgr_GetObjectInstance(oid := oid, iid := iid_ITcADI, ADR(ip_DataArea));
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

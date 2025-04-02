@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<TcSmItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4026.14" ClassName="CTComObjDef">
+	<DataTypes>
+		<DataType>
+			<Name GUID="{658D4B07-CCBE-463E-B186-5BAD3BAD5B1D}">I_StateMachine</Name>
+			<BitSize X64="64">32</BitSize>
+			<BaseType GUID="{00000001-0000-0000-E000-000000000064}">ITcUnknown</BaseType>
+			<Method>
+				<Name>M_Start</Name>
+				<ReturnType GUID="{18071995-0000-0000-0000-000000000019}">HRESULT</ReturnType>
+				<ReturnBitSize>32</ReturnBitSize>
+			</Method>
+			<Method>
+				<Name>M_Stop</Name>
+				<ReturnType GUID="{18071995-0000-0000-0000-000000000019}">HRESULT</ReturnType>
+				<ReturnBitSize>32</ReturnBitSize>
+			</Method>
+			<Method>
+				<Name>M_GetState</Name>
+				<ReturnType GUID="{18071995-0000-0000-0000-000000000019}">HRESULT</ReturnType>
+				<ReturnBitSize>32</ReturnBitSize>
+				<Parameter>
+					<Name>State</Name>
+					<Type GUID="{18071995-0000-0000-0000-000000000006}" ReferenceTo="true">INT</Type>
+					<BitSize X64="64">32</BitSize>
+				</Parameter>
+			</Method>
+			<Hides>
+				<Hide GUID="{37B5FD93-3D24-4308-915F-23F3862A66CF}"/>
+				<Hide GUID="{5CE72DEE-1034-433D-8C4F-A94CFE8BFFC3}"/>
+			</Hides>
+		</DataType>
+	</DataTypes>
+	<Module Id="#x01010010" KeepUnrestoredLinks="2" ClassFactoryId="C++ Module Vendor|cppCode|0.0.0.1">
+		<Name>__FILENAME__</Name>
+		<TmcDesc GUID="{0116FE3C-346F-44EF-9069-89D2FB469040}" ClassFactoryId="C++ Module Vendor|cppCode|0.0.0.1">
+			<Name>RtContextModule</Name>
+			<CLSID ClassFactory="cppCode" RealTimeInstantiable="true">{0116FE3C-346F-44EF-9069-89D2FB469040}</CLSID>
+			<Licenses>
+				<License>
+					<LicenseId>{304D006A-8299-4560-AB79-438534B50288}</LicenseId>
+				</License>
+			</Licenses>
+			<InitSequence>PSO</InitSequence>
+			<Contexts>
+				<Context>
+					<Id>1</Id>
+				</Context>
+			</Contexts>
+			<Interfaces>
+				<Interface DisableCodeGeneration="true">
+					<Type GUID="{00000012-0000-0000-E000-000000000064}">ITComObject</Type>
+				</Interface>
+				<Interface DisableCodeGeneration="true">
+					<Type GUID="{03000012-0000-0000-E000-000000000064}">ITcADI</Type>
+				</Interface>
+				<Interface DisableCodeGeneration="true">
+					<Type GUID="{03000018-0000-0000-E000-000000000064}">ITcWatchSource</Type>
+				</Interface>
+				<Interface>
+					<Type GUID="{658D4B07-CCBE-463E-B186-5BAD3BAD5B1D}">I_StateMachine</Type>
+				</Interface>
+			</Interfaces>
+			<Parameters>
+				<Parameter HideParameter="true">
+					<Name>TraceLevelMax</Name>
+					<Comment><![CDATA[Controls the amount of log messages.]]></Comment>
+					<BitSize>32</BitSize>
+					<BaseType GUID="{8007AE3B-86BB-40F2-B385-EF87FCC239A4}">TcTraceLevel</BaseType>
+					<PTCID>#x03002103</PTCID>
+					<ContextId>1</ContextId>
+				</Parameter>
+				<Parameter CreateSymbol="true">
+					<Name>State</Name>
+					<BitSize>16</BitSize>
+					<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+					<PTCID>#x00000001</PTCID>
+					<ContextId>1</ContextId>
+				</Parameter>
+			</Parameters>
+			<DataAreas>
+				<DataArea>
+					<AreaNo AreaType="InputSrc" CreateSymbols="true" ShowSymbols="true">1</AreaNo>
+					<Name>Inputs</Name>
+					<ContextId>1</ContextId>
+					<ByteSize>2</ByteSize>
+					<Symbol>
+						<Name>In1</Name>
+						<BitSize>16</BitSize>
+						<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+						<BitOffs>0</BitOffs>
+					</Symbol>
+				</DataArea>
+				<DataArea>
+					<AreaNo AreaType="OutputDst" CreateSymbols="true" ShowSymbols="true">2</AreaNo>
+					<Name>Outputs</Name>
+					<ContextId>1</ContextId>
+					<ByteSize>2</ByteSize>
+					<Symbol>
+						<Name>out1</Name>
+						<BitSize>16</BitSize>
+						<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+						<BitOffs>0</BitOffs>
+					</Symbol>
+				</DataArea>
+			</DataAreas>
+			<ParameterValues>
+				<Value>
+					<Name>TraceLevelMax</Name>
+					<EnumText>tlAlways</EnumText>
+				</Value>
+				<Value>
+					<Name>State</Name>
+					<Value>10</Value>
+				</Value>
+			</ParameterValues>
+		</TmcDesc>
+	</Module>
+</TcSmItem>
